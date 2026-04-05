@@ -7,6 +7,8 @@ import { PretextTextSpread } from "@/components/PretextTextSpread";
 
 const firstLine = "KOMAL KRISHAN".split("");
 const secondLine = "SHRESTHA".split("");
+const roleLine = "Junior Web Developer & AI Builder";
+const heroSubtitle = "Building intelligent web experiences from Biratnagar, Nepal.";
 
 const letterVariants = {
   hidden: { opacity: 0, y: 40, filter: "blur(12px)" },
@@ -26,7 +28,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-end justify-center overflow-hidden bg-black"
+      className="relative min-h-[100svh] flex items-end justify-center overflow-hidden bg-black"
     >
       {/* ── ITACHI BACKGROUND IMAGE ── */}
       <motion.div
@@ -67,20 +69,21 @@ export function Hero() {
           background: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)",
         }}
       />
+      <div className="absolute inset-0 z-[1] pointer-events-none md:hidden bg-gradient-to-t from-black via-black/80 to-black/25" />
 
       {/* Red ambient glow — ties into the Sharingan from the image */}
       <div className="absolute top-[25%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[#cc0000]/[0.04] blur-[100px] pointer-events-none z-[2]" />
 
       {/* ── CONTENT — positioned at bottom ── */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 w-full pb-24">
+      <div className="relative z-10 max-w-5xl mx-auto px-5 sm:px-6 w-full pb-20 sm:pb-24">
         {/* Status badge */}
         <motion.div
           initial={{ opacity: 0, y: 20, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
-          className="mb-5"
+          className="mb-4 sm:mb-5"
         >
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono border border-red-900/30 bg-black/60 backdrop-blur-sm">
+          <span className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] sm:text-xs font-mono border border-red-900/30 bg-black/60 backdrop-blur-sm">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-600 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600" />
@@ -89,48 +92,72 @@ export function Hero() {
           </span>
         </motion.div>
 
-        {/* Name — two-line reveal */}
-        <div className="overflow-hidden mb-1">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            className="flex flex-wrap gap-x-2 md:gap-x-3"
-            style={{ perspective: "600px" }}
+        {/* Name — mobile-optimized typography */}
+        <div className="md:hidden mb-4">
+          <motion.h1
+            initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.8, delay: 1.2, ease: [0.22, 1, 0.36, 1] as const }}
+            className="text-[2.05rem] leading-[0.9] font-display font-bold tracking-[0.06em] text-text-primary"
+            style={{ textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}
           >
-            {firstLine.map((letter, i) => (
-              <motion.span
-                key={`first-${i}`}
-                custom={i}
-                variants={letterVariants}
-                className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold inline-block tracking-tight ${
-                  letter === " " ? "w-3 md:w-4" : "text-text-primary"
-                }`}
-                style={{ textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}
-              >
-                {letter === " " ? "\u00A0" : letter}
-              </motion.span>
-            ))}
-          </motion.div>
+            KOMAL KRISHAN
+          </motion.h1>
+          <motion.h2
+            initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.8, delay: 1.45, ease: [0.22, 1, 0.36, 1] as const }}
+            className="text-[2rem] leading-[0.9] font-display font-bold tracking-[0.08em] text-gradient mt-1"
+            style={{ textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}
+          >
+            SHRESTHA
+          </motion.h2>
         </div>
-        <div className="overflow-hidden mb-5">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            className="flex flex-wrap gap-x-2 md:gap-x-3"
-            style={{ perspective: "600px" }}
-          >
-            {secondLine.map((letter, i) => (
-              <motion.span
-                key={`last-${i}`}
-                custom={i + firstLine.length}
-                variants={letterVariants}
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-gradient inline-block tracking-tight"
-                style={{ textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}
-              >
-                {letter}
-              </motion.span>
-            ))}
-          </motion.div>
+
+        {/* Name — desktop reveal */}
+        <div className="hidden md:block">
+          <div className="overflow-hidden mb-1">
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              className="flex flex-wrap gap-x-2 md:gap-x-3"
+              style={{ perspective: "600px" }}
+            >
+              {firstLine.map((letter, i) => (
+                <motion.span
+                  key={`first-${i}`}
+                  custom={i}
+                  variants={letterVariants}
+                  className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold inline-block tracking-tight ${
+                    letter === " " ? "w-3 md:w-4" : "text-text-primary"
+                  }`}
+                  style={{ textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}
+                >
+                  {letter === " " ? "\u00A0" : letter}
+                </motion.span>
+              ))}
+            </motion.div>
+          </div>
+          <div className="overflow-hidden mb-5">
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              className="flex flex-wrap gap-x-2 md:gap-x-3"
+              style={{ perspective: "600px" }}
+            >
+              {secondLine.map((letter, i) => (
+                <motion.span
+                  key={`last-${i}`}
+                  custom={i + firstLine.length}
+                  variants={letterVariants}
+                  className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-gradient inline-block tracking-tight"
+                  style={{ textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}
+                >
+                  {letter}
+                </motion.span>
+              ))}
+            </motion.div>
+          </div>
         </div>
 
         {/* Role line */}
@@ -138,26 +165,36 @@ export function Hero() {
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 2.0, ease: [0.22, 1, 0.36, 1] as const }}
-          className="flex items-center gap-4 mb-3"
+          className="hidden md:flex items-center gap-4 mb-3"
         >
           <div className="h-px w-10 bg-gradient-to-r from-red-600 to-red-900" />
           <PretextTextSpread
             className="text-base md:text-lg text-text-secondary/90 font-body tracking-wide"
-            segments={[{ text: "Junior Web Developer & AI Builder" }]}
+            segments={[{ text: roleLine }]}
           />
         </motion.div>
+        <motion.p
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 1.9, ease: [0.22, 1, 0.36, 1] as const }}
+          className="md:hidden text-sm leading-snug text-text-secondary/90 font-body mb-4 max-w-[20rem]"
+        >
+          {roleLine}
+        </motion.p>
 
         {/* Typewriter */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 2.4 }}
-          className="mb-8"
+          className="mb-7 sm:mb-8"
         >
-          <Typewriter
-            text="Building intelligent web experiences from Biratnagar, Nepal."
-            delayStart={2600}
-          />
+          <p className="md:hidden text-[15px] leading-relaxed text-text-secondary max-w-[22rem]">
+            {heroSubtitle}
+          </p>
+          <div className="hidden md:block">
+            <Typewriter text={heroSubtitle} delayStart={2600} />
+          </div>
         </motion.div>
 
         {/* CTA buttons */}
@@ -165,13 +202,13 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 3.0, ease: [0.22, 1, 0.36, 1] as const }}
-          className="flex flex-wrap gap-4"
+          className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-4 w-full"
         >
           <motion.a
             href="#projects"
             whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(200,0,0,0.35)" }}
             whileTap={{ scale: 0.97 }}
-            className="group relative px-7 py-3.5 rounded-xl font-body text-sm font-semibold text-white overflow-hidden transition-all"
+            className="group relative w-full sm:w-auto px-7 py-3.5 rounded-xl font-body text-sm font-semibold text-white overflow-hidden transition-all flex items-center justify-center"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-red-700 via-red-600 to-[#ff6b00] opacity-90" />
             <span className="relative z-10 flex items-center gap-2">
@@ -183,7 +220,7 @@ export function Hero() {
             href="#contact"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
-            className="px-7 py-3.5 rounded-xl border border-red-900/40 text-text-primary font-body text-sm font-semibold hover:bg-red-900/10 backdrop-blur-sm transition-all"
+            className="w-full sm:w-auto px-7 py-3.5 rounded-xl border border-red-900/40 text-text-primary font-body text-sm font-semibold hover:bg-red-900/10 backdrop-blur-sm transition-all flex items-center justify-center"
           >
             Send a Scroll
           </motion.a>
@@ -195,7 +232,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 3.5 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
+        className="hidden md:flex absolute bottom-6 left-1/2 -translate-x-1/2 flex-col items-center gap-2 z-10"
       >
         <span className="text-[10px] font-mono text-text-muted/50 uppercase tracking-widest">Scroll</span>
         <motion.div

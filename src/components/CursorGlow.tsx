@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export function CursorGlow() {
+  const [isDesktop, setIsDesktop] = useState(false);
   const [visible, setVisible] = useState(false);
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -12,10 +13,32 @@ export function CursorGlow() {
   const springY = useSpring(cursorY, { damping: 25, stiffness: 200 });
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+
+    const syncDesktopState = () => {
+      setIsDesktop(mediaQuery.matches);
+    };
+
+    syncDesktopState();
+    mediaQuery.addEventListener("change", syncDesktopState);
+
+    return () => {
+      mediaQuery.removeEventListener("change", syncDesktopState);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isDesktop) {
+      setVisible(false);
+      cursorX.set(-100);
+      cursorY.set(-100);
+      return;
+    }
+
     const move = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
-      if (!visible) setVisible(true);
+      setVisible((current) => current || true);
     };
 
     const leave = () => setVisible(false);
@@ -30,9 +53,9 @@ export function CursorGlow() {
       document.removeEventListener("mouseleave", leave);
       document.removeEventListener("mouseenter", enter);
     };
-  }, [cursorX, cursorY, visible]);
+  }, [cursorX, cursorY, isDesktop]);
 
-  if (typeof window !== "undefined" && window.innerWidth < 768) return null;
+  if (!isDesktop) return null;
 
   return (
     <motion.div
