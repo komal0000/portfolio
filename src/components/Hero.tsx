@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Typewriter } from "./Typewriter";
+import { PretextTextSpread } from "@/components/PretextTextSpread";
 
 const ParticleField = dynamic(() => import("./ParticleField"), { ssr: false });
 
@@ -134,9 +135,10 @@ export function Hero() {
           className="flex items-center gap-4 mb-4"
         >
           <div className="h-px w-12 bg-gradient-to-r from-[#ff6b00] to-[#e63946]" />
-          <p className="text-lg md:text-xl text-text-secondary font-body tracking-wide">
-            Junior Web Developer & AI Builder
-          </p>
+          <PretextTextSpread
+            className="text-lg md:text-xl text-text-secondary font-body tracking-wide"
+            segments={[{ text: "Junior Web Developer & AI Builder" }]}
+          />
         </motion.div>
 
         {/* Typewriter tagline */}

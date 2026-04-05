@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { PORTFOLIO_DATA } from "@/lib/portfolio-data";
+import { PretextTextSpread } from "@/components/PretextTextSpread";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -54,9 +55,10 @@ export function Projects() {
             <span className="text-text-primary">Mission </span>
             <span className="text-gradient">Log</span>
           </h2>
-          <p className="text-text-secondary font-body mt-4 max-w-lg">
-            Completed missions spanning institutional websites, e-commerce, and AI-powered applications.
-          </p>
+          <PretextTextSpread
+            className="text-text-secondary font-body mt-4 max-w-lg"
+            segments={[{ text: "Completed missions spanning institutional websites, e-commerce, and AI-powered applications." }]}
+          />
         </motion.div>
 
         <motion.div
@@ -113,9 +115,10 @@ export function Projects() {
                   {project.name}
                 </h3>
 
-                <p className="text-sm text-text-secondary font-body leading-relaxed mb-5">
-                  {project.description}
-                </p>
+                <PretextTextSpread
+                  className="text-sm text-text-secondary font-body leading-relaxed mb-5"
+                  segments={[{ text: project.description }]}
+                />
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2">

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
+import { PretextTextSpread } from "@/components/PretextTextSpread";
 
 function AnimatedCounter({
   target,
@@ -145,22 +146,25 @@ export function About() {
           {/* Text column */}
           <div className="lg:col-span-3 space-y-6">
             <motion.div variants={itemVariants}>
-              <p className="text-lg text-text-secondary font-body leading-relaxed">
-                I&apos;m <span className="text-text-primary font-semibold">Komal Krishan Shrestha</span>, a
-                Web Developer and AI Builder specializing in end-to-end application
-                development. I transform complex business requirements into
-                polished, high-performance digital products.
-              </p>
+              <PretextTextSpread
+                className="text-lg text-text-secondary font-body leading-relaxed"
+                segments={[
+                  { text: "I'm " },
+                  { text: "Komal Krishan Shrestha", className: "text-text-primary font-semibold" },
+                  { text: ", a Web Developer and AI Builder specializing in end-to-end application development. I transform complex business requirements into polished, high-performance digital products." },
+                ]}
+              />
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <p className="text-text-secondary font-body leading-relaxed">
-                At <span className="text-[#ff6b00] font-medium">NeedTechnosoft</span>, I architect
-                and deliver institutional websites, e-commerce platforms, and
-                AI-driven SaaS solutions. My approach combines meticulous frontend
-                craft with robust, scalable backend systems — always optimized
-                for real-world performance.
-              </p>
+              <PretextTextSpread
+                className="text-text-secondary font-body leading-relaxed"
+                segments={[
+                  { text: "At " },
+                  { text: "NeedTechnosoft", className: "text-[#ff6b00] font-medium" },
+                  { text: ", I architect and deliver institutional websites, e-commerce platforms, and AI-driven SaaS solutions. My approach combines meticulous frontend craft with robust, scalable backend systems \u2014 always optimized for real-world performance." },
+                ]}
+              />
             </motion.div>
 
             {/* Highlight pills */}

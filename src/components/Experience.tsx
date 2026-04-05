@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { PORTFOLIO_DATA } from "@/lib/portfolio-data";
+import { PretextTextSpread } from "@/components/PretextTextSpread";
 
 const itemVariants = {
   hidden: { opacity: 0, y: 30, x: -10 },
@@ -69,9 +70,10 @@ export function Experience() {
                     <h4 className="text-lg font-display font-bold text-text-primary">
                       {exp.role}
                     </h4>
-                    <p className="text-sm text-[#ff6b00] font-body mb-4">
-                      {exp.company} — {exp.location}
-                    </p>
+                    <PretextTextSpread
+                      className="text-sm text-[#ff6b00] font-body mb-4"
+                      segments={[{ text: `${exp.company} \u2014 ${exp.location}` }]}
+                    />
                     <ul className="space-y-2">
                       {exp.bullets.map((bullet, j) => (
                         <li
@@ -120,9 +122,10 @@ export function Experience() {
                     <h4 className="text-lg font-display font-bold text-text-primary">
                       {edu.degree}
                     </h4>
-                    <p className="text-sm text-[#e63946] font-body">
-                      {edu.institution} — {edu.location}
-                    </p>
+                    <PretextTextSpread
+                      className="text-sm text-[#e63946] font-body"
+                      segments={[{ text: `${edu.institution} \u2014 ${edu.location}` }]}
+                    />
                   </div>
                 </motion.div>
               ))}

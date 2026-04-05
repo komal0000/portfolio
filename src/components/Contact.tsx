@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { PORTFOLIO_DATA } from "@/lib/portfolio-data";
+import { PretextTextSpread } from "@/components/PretextTextSpread";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -89,9 +90,10 @@ export function Contact() {
             <br />
             <span className="text-gradient">Scroll</span>
           </h2>
-          <p className="text-text-secondary font-body max-w-md mx-auto">
-            Have a mission in mind? Let&apos;s join forces and build something legendary.
-          </p>
+          <PretextTextSpread
+            className="text-text-secondary font-body max-w-md mx-auto"
+            segments={[{ text: "Have a mission in mind? Let's join forces and build something legendary." }]}
+          />
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-16">
