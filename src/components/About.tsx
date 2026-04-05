@@ -41,7 +41,7 @@ function AnimatedCounter({
       whileHover={{ y: -4, scale: 1.02 }}
       className="glass-card gradient-border rounded-2xl p-6 text-center transition-all duration-300 group"
     >
-      <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-accent-indigo/20 to-purple-500/20 flex items-center justify-center text-accent-indigo group-hover:scale-110 transition-transform">
+      <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-[#ff6b00]/20 to-[#e63946]/20 flex items-center justify-center text-[#ff6b00] group-hover:scale-110 transition-transform">
         {icon}
       </div>
       <div className="text-4xl md:text-5xl font-display font-bold text-gradient mb-1">
@@ -73,18 +73,18 @@ const itemVariants = {
 };
 
 const highlights = [
-  { text: "Modern UI/UX", color: "from-indigo-500 to-purple-500" },
-  { text: "AI-Powered Apps", color: "from-cyan-500 to-blue-500" },
-  { text: "Full-Stack", color: "from-emerald-500 to-teal-500" },
-  { text: "Scalable Systems", color: "from-pink-500 to-rose-500" },
+  { text: "Modern UI/UX", color: "from-[#ff6b00] to-[#ff8c00]" },
+  { text: "AI-Powered Apps", color: "from-[#e63946] to-[#ff6b00]" },
+  { text: "Full-Stack", color: "from-[#ffd166] to-[#ff8c00]" },
+  { text: "Scalable Systems", color: "from-[#ff8c00] to-[#e63946]" },
 ];
 
 export function About() {
   return (
     <section id="about" className="py-32 bg-bg-secondary relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent-indigo/5 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#ff6b00]/5 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#e63946]/5 rounded-full blur-[120px] pointer-events-none" />
 
       <motion.div
         variants={containerVariants}
@@ -95,12 +95,12 @@ export function About() {
       >
         {/* Section header */}
         <motion.div variants={itemVariants} className="mb-16">
-          <span className="text-xs font-mono text-accent-indigo uppercase tracking-[0.3em] block mb-4">
-            &#47;&#47; About
+          <span className="text-xs font-mono text-[#ff6b00] uppercase tracking-[0.3em] block mb-4">
+            &#47;&#47; Ninja Profile
           </span>
           <h2 className="text-4xl md:text-6xl font-display font-bold tracking-tight">
-            <span className="text-text-primary">Crafting Digital </span>
-            <span className="text-gradient">Experiences</span>
+            <span className="text-text-primary">Shinobi </span>
+            <span className="text-gradient">Profile</span>
           </h2>
         </motion.div>
 
@@ -113,8 +113,8 @@ export function About() {
           >
             <div className="relative group">
               {/* Animated gradient ring */}
-              <div className="absolute -inset-3 rounded-2xl bg-gradient-to-br from-accent-indigo via-purple-500 to-pink-500 opacity-30 blur-xl animate-pulse-glow group-hover:opacity-50 transition-opacity" />
-              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-accent-indigo via-purple-500 to-pink-500 opacity-60 group-hover:opacity-80 transition-opacity" />
+              <div className="absolute -inset-3 rounded-2xl bg-gradient-to-br from-[#ff6b00] via-[#e63946] to-[#ffd166] opacity-30 blur-xl animate-pulse-glow group-hover:opacity-50 transition-opacity" />
+              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-[#ff6b00] via-[#e63946] to-[#ffd166] opacity-60 group-hover:opacity-80 transition-opacity" />
 
               <div className="relative w-64 h-80 md:w-72 md:h-96 rounded-2xl overflow-hidden">
                 <Image
@@ -135,8 +135,8 @@ export function About() {
                 className="absolute -bottom-4 -right-4 glass-card rounded-xl px-4 py-3 shadow-xl"
               >
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse" />
-                  <span className="text-xs font-mono text-text-secondary">Based in Nepal</span>
+                  <div className="w-2 h-2 rounded-full bg-[#ff6b00] animate-pulse" />
+                  <span className="text-xs font-mono text-text-secondary">Village: Biratnagar</span>
                 </div>
               </motion.div>
             </div>
@@ -155,7 +155,7 @@ export function About() {
 
             <motion.div variants={itemVariants}>
               <p className="text-text-secondary font-body leading-relaxed">
-                At <span className="text-accent-indigo font-medium">NeedTechnosoft</span>, I architect
+                At <span className="text-[#ff6b00] font-medium">NeedTechnosoft</span>, I architect
                 and deliver institutional websites, e-commerce platforms, and
                 AI-driven SaaS solutions. My approach combines meticulous frontend
                 craft with robust, scalable backend systems — always optimized
@@ -168,7 +168,7 @@ export function About() {
               {highlights.map((h) => (
                 <span
                   key={h.text}
-                  className="px-4 py-2 rounded-full text-xs font-mono text-text-primary border border-border-subtle bg-bg-card/50 backdrop-blur-sm hover:border-accent-indigo/40 transition-colors"
+                  className="px-4 py-2 rounded-full text-xs font-mono text-text-primary border border-border-subtle bg-bg-card/50 backdrop-blur-sm hover:border-[#ff6b00]/40 transition-colors"
                 >
                   <span className={`inline-block w-1.5 h-1.5 rounded-full bg-gradient-to-r ${h.color} mr-2`} />
                   {h.text}
@@ -187,14 +187,14 @@ export function About() {
               className="grid grid-cols-2 gap-4"
             >
               <div className="glass-card rounded-xl p-4">
-                <span className="text-[10px] font-mono text-text-muted uppercase tracking-wider block mb-1">Current Role</span>
+                <span className="text-[10px] font-mono text-text-muted uppercase tracking-wider block mb-1">Current Mission</span>
                 <span className="text-sm font-body text-text-primary font-medium">Jr. Web Developer</span>
-                <span className="text-xs text-accent-indigo font-body block">NeedTechnosoft</span>
+                <span className="text-xs text-[#ff6b00] font-body block">NeedTechnosoft</span>
               </div>
               <div className="glass-card rounded-xl p-4">
-                <span className="text-[10px] font-mono text-text-muted uppercase tracking-wider block mb-1">Education</span>
+                <span className="text-[10px] font-mono text-text-muted uppercase tracking-wider block mb-1">Training Academy</span>
                 <span className="text-sm font-body text-text-primary font-medium">B.IT (Running)</span>
-                <span className="text-xs text-accent-indigo font-body block">Purbanchal University</span>
+                <span className="text-xs text-[#ff6b00] font-body block">Purbanchal University</span>
               </div>
             </motion.div>
           </div>

@@ -30,6 +30,11 @@ const config: Config = {
       },
       animation: {
         marquee: "marquee 30s linear infinite",
+        "leaf-fall": "leaf-fall 8s linear infinite",
+        smoke: "smoke-reveal 0.8s ease-out forwards",
+        "chakra-pulse": "chakra-pulse 2s ease-in-out infinite",
+        swirl: "swirl 3s linear infinite",
+        "kunai-enter": "kunai-enter 0.6s ease-out forwards",
       },
       keyframes: {
         marquee: {

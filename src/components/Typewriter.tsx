@@ -44,7 +44,7 @@ export function Typewriter({ text, delayStart = 1800 }: Props) {
       {displayed}
       {!done && (
         <span
-          className="inline-block w-0.5 h-5 bg-accent-indigo ml-0.5 align-middle"
+          className="inline-block w-0.5 h-5 bg-[#ff6b00] ml-0.5 align-middle"
           style={{
             opacity: cursorVisible ? 1 : 0,
             transition: "opacity 0.1s",

@@ -16,7 +16,7 @@ const itemVariants = {
 export function Experience() {
   return (
     <section id="experience" className="py-32 bg-bg-primary relative overflow-hidden">
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#ff6b00]/5 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <motion.div
@@ -26,12 +26,12 @@ export function Experience() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }}
           className="mb-16"
         >
-          <span className="text-xs font-mono text-accent-emerald uppercase tracking-[0.3em] block mb-4">
-            &#47;&#47; Journey
+          <span className="text-xs font-mono text-[#ff6b00] uppercase tracking-[0.3em] block mb-4">
+            &#47;&#47; Shinobi Path
           </span>
           <h2 className="text-4xl md:text-6xl font-display font-bold tracking-tight">
-            <span className="text-text-primary">Experience & </span>
-            <span className="text-gradient">Education</span>
+            <span className="text-text-primary">Shinobi </span>
+            <span className="text-gradient">Path</span>
           </h2>
         </motion.div>
 
@@ -39,12 +39,12 @@ export function Experience() {
           {/* Experience Column */}
           <div>
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-8 h-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500" />
-              <span className="text-sm font-mono text-text-muted uppercase tracking-wider">Work</span>
+              <div className="w-8 h-1 rounded-full bg-gradient-to-r from-[#ff6b00] to-[#ff8c00]" />
+              <span className="text-sm font-mono text-text-muted uppercase tracking-wider">Missions</span>
             </div>
             <div className="relative pl-8 space-y-8">
               {/* Gradient timeline line */}
-              <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-accent-emerald via-accent-emerald/30 to-transparent" />
+              <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-[#ff6b00] via-[#ff6b00]/30 to-transparent" />
 
               {PORTFOLIO_DATA.experience.map((exp, i) => (
                 <motion.div
@@ -57,19 +57,19 @@ export function Experience() {
                 >
                   {/* Glowing dot */}
                   <div className="absolute -left-[25px] top-2">
-                    <div className="w-4 h-4 rounded-full bg-bg-primary border-2 border-accent-emerald relative">
-                      <div className="absolute inset-0 rounded-full bg-accent-emerald/30 animate-ping" />
+                    <div className="w-4 h-4 rounded-full bg-bg-primary border-2 border-[#ff6b00] relative">
+                      <div className="absolute inset-0 rounded-full bg-[#ff6b00]/30 animate-ping" />
                     </div>
                   </div>
 
-                  <div className="glass-card rounded-xl p-5 group hover:border-accent-emerald/30 transition-all duration-300">
-                    <span className="text-[11px] font-mono text-accent-emerald block mb-2 tracking-wider">
+                  <div className="glass-card rounded-xl p-5 group hover:border-[#ff6b00]/30 transition-all duration-300">
+                    <span className="text-[11px] font-mono text-[#ff6b00] block mb-2 tracking-wider">
                       {exp.period}
                     </span>
                     <h4 className="text-lg font-display font-bold text-text-primary">
                       {exp.role}
                     </h4>
-                    <p className="text-sm text-accent-indigo font-body mb-4">
+                    <p className="text-sm text-[#ff6b00] font-body mb-4">
                       {exp.company} — {exp.location}
                     </p>
                     <ul className="space-y-2">
@@ -78,7 +78,7 @@ export function Experience() {
                           key={j}
                           className="text-sm text-text-secondary font-body leading-relaxed flex gap-2"
                         >
-                          <span className="text-accent-emerald mt-0.5 shrink-0">
+                          <span className="text-[#ff6b00] mt-0.5 shrink-0">
                             &#x25B8;
                           </span>
                           {bullet}
@@ -94,11 +94,11 @@ export function Experience() {
           {/* Education Column */}
           <div>
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-8 h-1 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
-              <span className="text-sm font-mono text-text-muted uppercase tracking-wider">Education</span>
+              <div className="w-8 h-1 rounded-full bg-gradient-to-r from-[#e63946] to-[#ff6b00]" />
+              <span className="text-sm font-mono text-text-muted uppercase tracking-wider">Training</span>
             </div>
             <div className="relative pl-8 space-y-8">
-              <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-accent-cyan via-accent-cyan/30 to-transparent" />
+              <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-[#e63946] via-[#e63946]/30 to-transparent" />
 
               {PORTFOLIO_DATA.education.map((edu, i) => (
                 <motion.div
@@ -110,17 +110,17 @@ export function Experience() {
                   className="relative"
                 >
                   <div className="absolute -left-[25px] top-2">
-                    <div className="w-4 h-4 rounded-full bg-bg-primary border-2 border-accent-cyan" />
+                    <div className="w-4 h-4 rounded-full bg-bg-primary border-2 border-[#e63946]" />
                   </div>
 
-                  <div className="glass-card rounded-xl p-5 group hover:border-accent-cyan/30 transition-all duration-300">
-                    <span className="text-[11px] font-mono text-accent-cyan block mb-2 tracking-wider">
+                  <div className="glass-card rounded-xl p-5 group hover:border-[#e63946]/30 transition-all duration-300">
+                    <span className="text-[11px] font-mono text-[#e63946] block mb-2 tracking-wider">
                       {edu.period}
                     </span>
                     <h4 className="text-lg font-display font-bold text-text-primary">
                       {edu.degree}
                     </h4>
-                    <p className="text-sm text-accent-indigo font-body">
+                    <p className="text-sm text-[#e63946] font-body">
                       {edu.institution} — {edu.location}
                     </p>
                   </div>

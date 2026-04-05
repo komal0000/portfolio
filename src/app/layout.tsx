@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import { Cinzel, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
+const cinzel = Cinzel({
   subsets: ["latin"],
   variable: "--font-display",
 });
@@ -44,7 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased font-body`}
+        className={`${cinzel.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased font-body`}
       >
         {children}
       </body>

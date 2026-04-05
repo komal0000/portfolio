@@ -21,16 +21,23 @@ const cardVariants = {
 };
 
 const typeColors: Record<string, string> = {
-  Web: "from-indigo-500 to-purple-500",
-  "E-commerce": "from-pink-500 to-rose-500",
-  "AI/SaaS": "from-cyan-500 to-blue-500",
-  "AI Tool": "from-emerald-500 to-teal-500",
+  Web: "from-[#ff6b00] to-[#ff8c00]",
+  "E-commerce": "from-[#e63946] to-[#ff6b00]",
+  "AI/SaaS": "from-[#ffd166] to-[#ff8c00]",
+  "AI Tool": "from-[#ff8c00] to-[#e63946]",
+};
+
+const missionRanks: Record<string, string> = {
+  Web: "C-Rank",
+  "E-commerce": "B-Rank",
+  "AI/SaaS": "A-Rank",
+  "AI Tool": "S-Rank",
 };
 
 export function Projects() {
   return (
     <section id="projects" className="py-32 bg-bg-secondary relative overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-accent-indigo/5 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#ff6b00]/5 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <motion.div
@@ -40,15 +47,15 @@ export function Projects() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }}
           className="mb-16"
         >
-          <span className="text-xs font-mono text-accent-indigo uppercase tracking-[0.3em] block mb-4">
-            &#47;&#47; Portfolio
+          <span className="text-xs font-mono text-[#ff6b00] uppercase tracking-[0.3em] block mb-4">
+            &#47;&#47; Mission Log
           </span>
           <h2 className="text-4xl md:text-6xl font-display font-bold tracking-tight">
-            <span className="text-text-primary">Selected </span>
-            <span className="text-gradient">Work</span>
+            <span className="text-text-primary">Mission </span>
+            <span className="text-gradient">Log</span>
           </h2>
           <p className="text-text-secondary font-body mt-4 max-w-lg">
-            A collection of projects spanning institutional websites, e-commerce, and AI-powered applications.
+            Completed missions spanning institutional websites, e-commerce, and AI-powered applications.
           </p>
         </motion.div>
 
@@ -59,7 +66,7 @@ export function Projects() {
           viewport={{ once: true, margin: "-50px" }}
           className="grid md:grid-cols-2 gap-6"
         >
-          {PORTFOLIO_DATA.projects.map((project, idx) => (
+          {PORTFOLIO_DATA.projects.map((project) => (
             <motion.div
               key={project.name}
               variants={cardVariants}
@@ -70,25 +77,25 @@ export function Projects() {
               className="group relative glass-card gradient-border rounded-2xl p-6 transition-all duration-300 overflow-hidden noise-overlay"
             >
               {/* Hover glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-accent-indigo/0 via-transparent to-purple-500/0 group-hover:from-accent-indigo/5 group-hover:to-purple-500/5 transition-all duration-500 pointer-events-none rounded-2xl" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#ff6b00]/0 via-transparent to-[#e63946]/0 group-hover:from-[#ff6b00]/5 group-hover:to-[#e63946]/5 transition-all duration-500 pointer-events-none rounded-2xl" />
 
               <div className="relative z-10">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <span className="text-xs font-mono text-text-muted">
-                      {String(idx + 1).padStart(2, "0")}
+                    <span className="text-[10px] font-mono text-[#ffd166]/60 uppercase">
+                      {missionRanks[project.type] || "D-Rank"}
                     </span>
-                    <span className={`text-xs font-mono px-3 py-1 rounded-full bg-gradient-to-r ${typeColors[project.type] || "from-indigo-500 to-purple-500"} text-white`}>
+                    <span className={`text-xs font-mono px-3 py-1 rounded-full bg-gradient-to-r ${typeColors[project.type] || "from-[#ff6b00] to-[#ff8c00]"} text-black font-semibold`}>
                       {project.type}
                     </span>
                   </div>
                   <motion.div
                     whileHover={{ rotate: 45 }}
-                    className="w-8 h-8 rounded-full border border-border-subtle flex items-center justify-center group-hover:border-accent-indigo/50 group-hover:bg-accent-indigo/10 transition-all"
+                    className="w-8 h-8 rounded-full border border-border-subtle flex items-center justify-center group-hover:border-[#ff6b00]/50 group-hover:bg-[#ff6b00]/10 transition-all"
                   >
                     <svg
-                      className="w-3.5 h-3.5 text-text-muted group-hover:text-accent-indigo transition-colors"
+                      className="w-3.5 h-3.5 text-text-muted group-hover:text-[#ff6b00] transition-colors"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -115,7 +122,7 @@ export function Projects() {
                   {project.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-[11px] font-mono text-text-muted px-3 py-1.5 rounded-lg bg-bg-primary/60 border border-border-subtle group-hover:border-border-accent/30 transition-colors"
+                      className="text-[11px] font-mono text-text-muted px-3 py-1.5 rounded-lg bg-bg-primary/60 border border-border-subtle group-hover:border-[#ff6b00]/30 transition-colors"
                     >
                       {tag}
                     </span>

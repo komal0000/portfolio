@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 
 const NAV_LINKS = [
   { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Work", href: "#projects" },
-  { label: "Contact", href: "#contact" },
+  { label: "Profile", href: "#about" },
+  { label: "Jutsu", href: "#skills" },
+  { label: "Missions", href: "#projects" },
+  { label: "Scroll", href: "#contact" },
 ];
 
 export function Navbar() {
@@ -48,7 +48,7 @@ export function Navbar() {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-[rgba(5,8,22,0.8)] backdrop-blur-2xl border-b border-border-subtle shadow-lg shadow-black/10"
+          ? "bg-[rgba(10,10,10,0.85)] backdrop-blur-2xl border-b border-[#ff6b00]/10 shadow-lg shadow-black/20"
           : "bg-transparent"
       }`}
     >
@@ -76,7 +76,7 @@ export function Navbar() {
               {active === link.label && (
                 <motion.span
                   layoutId="nav-underline"
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent-indigo rounded-full"
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#ff6b00] rounded-full"
                 />
               )}
             </a>
@@ -85,7 +85,7 @@ export function Navbar() {
             href="/komal_resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-body px-4 py-1.5 rounded-full border border-border-accent text-accent-indigo hover:bg-accent-indigo hover:text-white transition-all"
+            className="text-sm font-body px-4 py-1.5 rounded-full border border-[#ff6b00]/40 text-[#ff6b00] hover:bg-[#ff6b00] hover:text-black transition-all"
           >
             Resume
           </a>
@@ -131,7 +131,7 @@ export function Navbar() {
                 }}
                 className={`text-sm font-body ${
                   active === link.label
-                    ? "text-accent-indigo"
+                    ? "text-[#ff6b00]"
                     : "text-text-secondary"
                 }`}
               >
@@ -142,7 +142,7 @@ export function Navbar() {
               href="/komal_resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-body text-accent-indigo"
+              className="text-sm font-body text-[#ff6b00]"
             >
               Resume
             </a>

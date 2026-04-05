@@ -3,7 +3,7 @@ import { PORTFOLIO_DATA } from "@/lib/portfolio-data";
 export function Footer() {
   return (
     <footer className="py-10 bg-bg-primary relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-t from-accent-indigo/[0.02] to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#ff6b00]/[0.02] to-transparent pointer-events-none" />
       <div className="h-px w-full bg-gradient-to-r from-transparent via-border-subtle to-transparent" />
       <div className="max-w-6xl mx-auto px-6 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex flex-col items-center md:items-start gap-1">
@@ -27,7 +27,7 @@ export function Footer() {
               target={item.href.startsWith("http") ? "_blank" : undefined}
               rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
               aria-label={item.label}
-              className="w-9 h-9 rounded-lg border border-border-subtle flex items-center justify-center text-text-muted hover:text-accent-indigo hover:border-accent-indigo/40 hover:bg-accent-indigo/5 transition-all"
+              className="w-9 h-9 rounded-lg border border-border-subtle flex items-center justify-center text-text-muted hover:text-[#ff6b00] hover:border-[#ff6b00]/40 hover:bg-[#ff6b00]/5 transition-all"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
                 <path d={item.d} />

@@ -48,7 +48,7 @@ export function CursorGlow() {
         className="w-[500px] h-[500px] rounded-full transition-opacity duration-500"
         style={{
           background:
-            "radial-gradient(circle, rgba(99,102,241,0.07) 0%, rgba(168,85,247,0.04) 30%, transparent 70%)",
+            "radial-gradient(circle, rgba(255,107,0,0.08) 0%, rgba(255,140,0,0.04) 30%, transparent 70%)",
           opacity: visible ? 1 : 0,
         }}
       />

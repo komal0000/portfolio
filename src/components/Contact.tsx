@@ -69,8 +69,8 @@ const contactItems = [
 export function Contact() {
   return (
     <section id="contact" className="py-32 bg-bg-secondary relative overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-accent-indigo/5 rounded-full blur-[180px] pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#ff6b00]/5 rounded-full blur-[180px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#e63946]/5 rounded-full blur-[120px] pointer-events-none" />
 
       <motion.div
         variants={containerVariants}
@@ -81,16 +81,16 @@ export function Contact() {
       >
         {/* Header */}
         <motion.div variants={itemVariants} className="text-center mb-20">
-          <span className="text-xs font-mono text-accent-indigo uppercase tracking-[0.3em] block mb-4">
-            &#47;&#47; Contact
+          <span className="text-xs font-mono text-[#ff6b00] uppercase tracking-[0.3em] block mb-4">
+            &#47;&#47; Send a Scroll
           </span>
           <h2 className="text-5xl md:text-7xl font-display font-bold tracking-tight mb-4">
-            <span className="text-text-primary">Let&apos;s Build</span>
+            <span className="text-text-primary">Send a</span>
             <br />
-            <span className="text-gradient">Something Great</span>
+            <span className="text-gradient">Scroll</span>
           </h2>
           <p className="text-text-secondary font-body max-w-md mx-auto">
-            Have a project in mind? I&apos;d love to hear about it.
+            Have a mission in mind? Let&apos;s join forces and build something legendary.
           </p>
         </motion.div>
 
@@ -104,9 +104,9 @@ export function Contact() {
                 target={item.href.startsWith("http") ? "_blank" : undefined}
                 rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
                 whileHover={{ x: 6 }}
-                className="flex items-center gap-4 group glass-card rounded-xl p-4 transition-all duration-300 hover:border-accent-indigo/30"
+                className="flex items-center gap-4 group glass-card rounded-xl p-4 transition-all duration-300 hover:border-[#ff6b00]/30"
               >
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-indigo/20 to-purple-500/20 flex items-center justify-center text-text-muted group-hover:text-accent-indigo group-hover:scale-110 transition-all">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#ff6b00]/20 to-[#e63946]/20 flex items-center justify-center text-text-muted group-hover:text-[#ff6b00] group-hover:scale-110 transition-all">
                   {item.icon}
                 </div>
                 <div>
@@ -117,13 +117,13 @@ export function Contact() {
                     {item.value}
                   </span>
                 </div>
-                <svg className="w-4 h-4 text-text-muted/0 group-hover:text-accent-indigo/60 ml-auto transition-all group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                <svg className="w-4 h-4 text-text-muted/0 group-hover:text-[#ff6b00]/60 ml-auto transition-all group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </motion.a>
             ))}
 
             {/* Location badge */}
             <div className="glass-card rounded-xl p-4 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center text-accent-emerald">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#ffd166]/20 to-[#ff8c00]/20 flex items-center justify-center text-[#ffd166]">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
                   <circle cx="12" cy="10" r="3" />
@@ -149,7 +149,7 @@ export function Contact() {
               <input
                 type="text"
                 id="name"
-                className="w-full px-4 py-3.5 rounded-xl bg-bg-card/60 backdrop-blur-sm border border-border-subtle text-text-primary font-body text-sm focus:outline-none focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo/20 transition-all placeholder:text-text-muted"
+                className="w-full px-4 py-3.5 rounded-xl bg-bg-card/60 backdrop-blur-sm border border-border-subtle text-text-primary font-body text-sm focus:outline-none focus:border-[#ff6b00] focus:ring-1 focus:ring-[#ff6b00]/20 transition-all placeholder:text-text-muted"
                 placeholder="Your name"
               />
             </div>
@@ -160,7 +160,7 @@ export function Contact() {
               <input
                 type="email"
                 id="email"
-                className="w-full px-4 py-3.5 rounded-xl bg-bg-card/60 backdrop-blur-sm border border-border-subtle text-text-primary font-body text-sm focus:outline-none focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo/20 transition-all placeholder:text-text-muted"
+                className="w-full px-4 py-3.5 rounded-xl bg-bg-card/60 backdrop-blur-sm border border-border-subtle text-text-primary font-body text-sm focus:outline-none focus:border-[#ff6b00] focus:ring-1 focus:ring-[#ff6b00]/20 transition-all placeholder:text-text-muted"
                 placeholder="your@email.com"
               />
             </div>
@@ -171,19 +171,19 @@ export function Contact() {
               <textarea
                 id="message"
                 rows={5}
-                className="w-full px-4 py-3.5 rounded-xl bg-bg-card/60 backdrop-blur-sm border border-border-subtle text-text-primary font-body text-sm focus:outline-none focus:border-accent-indigo focus:ring-1 focus:ring-accent-indigo/20 transition-all resize-none placeholder:text-text-muted"
-                placeholder="Tell me about your project..."
+                className="w-full px-4 py-3.5 rounded-xl bg-bg-card/60 backdrop-blur-sm border border-border-subtle text-text-primary font-body text-sm focus:outline-none focus:border-[#ff6b00] focus:ring-1 focus:ring-[#ff6b00]/20 transition-all resize-none placeholder:text-text-muted"
+                placeholder="Describe your mission..."
               />
             </div>
             <motion.button
-              whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(99,102,241,0.3)" }}
+              whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(255,107,0,0.3)" }}
               whileTap={{ scale: 0.98 }}
               type="submit"
               className="relative w-full px-6 py-4 rounded-xl font-body text-sm font-semibold text-white overflow-hidden transition-all"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-accent-indigo via-purple-500 to-pink-500 animate-gradient-x" />
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                Send Message
+              <div className="absolute inset-0 bg-gradient-to-r from-[#ff6b00] via-[#e63946] to-[#ffd166] animate-gradient-x" />
+              <span className="relative z-10 flex items-center justify-center gap-2 text-black">
+                Send Scroll
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </span>
             </motion.button>

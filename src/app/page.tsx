@@ -7,6 +7,7 @@ import { Experience } from "@/components/Experience";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 import { CursorGlow } from "@/components/CursorGlow";
+import { SectionTransition } from "@/components/SectionTransition";
 
 export default function Home() {
   return (
@@ -14,10 +15,15 @@ export default function Home() {
       <CursorGlow />
       <Navbar />
       <Hero />
+      <SectionTransition />
       <About />
+      <SectionTransition />
       <Skills />
+      <SectionTransition />
       <Projects />
+      <SectionTransition />
       <Experience />
+      <SectionTransition />
       <Contact />
       <Footer />
     </main>

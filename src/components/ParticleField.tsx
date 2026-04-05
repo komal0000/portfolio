@@ -25,53 +25,58 @@ export default function ParticleField() {
     container.appendChild(renderer.domElement);
 
     const isMobile = window.innerWidth < 768;
-    const PARTICLE_COUNT = isMobile ? 60 : 120;
-    const CONNECTION_DISTANCE = 15;
+    const LEAF_COUNT = isMobile ? 30 : 60;
 
-    const positions = new Float32Array(PARTICLE_COUNT * 3);
-    const velocities: THREE.Vector3[] = [];
+    // Create leaf-shaped geometry (diamond/rhombus)
+    const leafShape = new THREE.Shape();
+    leafShape.moveTo(0, 0.5);
+    leafShape.quadraticCurveTo(0.3, 0.25, 0.15, 0);
+    leafShape.quadraticCurveTo(0, -0.1, -0.15, 0);
+    leafShape.quadraticCurveTo(-0.3, 0.25, 0, 0.5);
 
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 80;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 80;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 40;
-      velocities.push(
-        new THREE.Vector3(
-          (Math.random() - 0.5) * 0.02,
-          (Math.random() - 0.5) * 0.02,
-          (Math.random() - 0.5) * 0.01
-        )
-      );
+    const leafGeom = new THREE.ShapeGeometry(leafShape);
+
+    const leafColors = [0xff6b00, 0xff8c00, 0xffd166, 0xe63946, 0xff6b00];
+
+    interface Leaf {
+      mesh: THREE.Mesh;
+      speed: number;
+      drift: number;
+      rotSpeed: number;
+      phase: number;
     }
 
-    const particleGeometry = new THREE.BufferGeometry();
-    particleGeometry.setAttribute(
-      "position",
-      new THREE.BufferAttribute(positions, 3)
-    );
+    const leaves: Leaf[] = [];
 
-    const particleMaterial = new THREE.PointsMaterial({
-      color: 0x6366f1,
-      size: isMobile ? 1.5 : 2,
-      transparent: true,
-      opacity: 0.6,
-      sizeAttenuation: true,
-    });
+    for (let i = 0; i < LEAF_COUNT; i++) {
+      const color = leafColors[Math.floor(Math.random() * leafColors.length)];
+      const mat = new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0.15 + Math.random() * 0.25,
+        side: THREE.DoubleSide,
+      });
+      const mesh = new THREE.Mesh(leafGeom, mat);
+      const scale = 0.4 + Math.random() * 0.8;
+      mesh.scale.set(scale, scale, 1);
+      mesh.position.set(
+        (Math.random() - 0.5) * 100,
+        40 + Math.random() * 40,
+        (Math.random() - 0.5) * 30
+      );
+      mesh.rotation.z = Math.random() * Math.PI * 2;
+      scene.add(mesh);
 
-    const particles = new THREE.Points(particleGeometry, particleMaterial);
-    scene.add(particles);
-
-    const lineGeometry = new THREE.BufferGeometry();
-    const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0x6366f1,
-      transparent: true,
-      opacity: 0.1,
-    });
-    const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
-    scene.add(lines);
+      leaves.push({
+        mesh,
+        speed: 0.02 + Math.random() * 0.04,
+        drift: (Math.random() - 0.5) * 0.02,
+        rotSpeed: (Math.random() - 0.5) * 0.02,
+        phase: Math.random() * Math.PI * 2,
+      });
+    }
 
     const mouse = { x: 0, y: 0 };
-    const targetRotation = { x: 0, y: 0 };
 
     function onMouseMove(e: MouseEvent) {
       mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -80,55 +85,28 @@ export default function ParticleField() {
     window.addEventListener("mousemove", onMouseMove);
 
     let animId: number;
+    let time = 0;
 
     function animate() {
       animId = requestAnimationFrame(animate);
+      time += 0.01;
 
-      const posArray = particleGeometry.attributes.position
-        .array as Float32Array;
+      leaves.forEach((leaf) => {
+        leaf.mesh.position.y -= leaf.speed;
+        leaf.mesh.position.x += leaf.drift + Math.sin(time + leaf.phase) * 0.01;
+        leaf.mesh.rotation.z += leaf.rotSpeed;
+        leaf.mesh.rotation.x += leaf.rotSpeed * 0.5;
 
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
-        posArray[i * 3] += velocities[i].x;
-        posArray[i * 3 + 1] += velocities[i].y;
-        posArray[i * 3 + 2] += velocities[i].z;
-
-        if (Math.abs(posArray[i * 3]) > 40) velocities[i].x *= -1;
-        if (Math.abs(posArray[i * 3 + 1]) > 40) velocities[i].y *= -1;
-        if (Math.abs(posArray[i * 3 + 2]) > 20) velocities[i].z *= -1;
-      }
-      particleGeometry.attributes.position.needsUpdate = true;
-
-      const linePositions: number[] = [];
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
-        for (let j = i + 1; j < PARTICLE_COUNT; j++) {
-          const dx = posArray[i * 3] - posArray[j * 3];
-          const dy = posArray[i * 3 + 1] - posArray[j * 3 + 1];
-          const dz = posArray[i * 3 + 2] - posArray[j * 3 + 2];
-          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-          if (dist < CONNECTION_DISTANCE) {
-            linePositions.push(
-              posArray[i * 3],
-              posArray[i * 3 + 1],
-              posArray[i * 3 + 2],
-              posArray[j * 3],
-              posArray[j * 3 + 1],
-              posArray[j * 3 + 2]
-            );
-          }
+        // Reset leaf to top when it falls below
+        if (leaf.mesh.position.y < -50) {
+          leaf.mesh.position.y = 50 + Math.random() * 20;
+          leaf.mesh.position.x = (Math.random() - 0.5) * 100;
         }
-      }
-      lineGeometry.setAttribute(
-        "position",
-        new THREE.Float32BufferAttribute(linePositions, 3)
-      );
+      });
 
-      targetRotation.x = mouse.y * 0.05;
-      targetRotation.y = mouse.x * 0.05;
-      scene.rotation.x += (targetRotation.x - scene.rotation.x) * 0.02;
-      scene.rotation.y += (targetRotation.y - scene.rotation.y) * 0.02;
-
-      particles.rotation.y += 0.0003;
+      // Gentle camera tilt following mouse
+      scene.rotation.x += (mouse.y * 0.03 - scene.rotation.x) * 0.02;
+      scene.rotation.y += (mouse.x * 0.03 - scene.rotation.y) * 0.02;
 
       renderer.render(scene, camera);
     }
