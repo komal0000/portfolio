@@ -6,13 +6,15 @@ import { Projects } from "@/components/Projects";
 import { Experience } from "@/components/Experience";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
-import { CursorGlow } from "@/components/CursorGlow";
+import { KunaiCursor } from "@/components/KunaiCursor";
+import { ItachiLoader } from "@/components/ItachiLoader";
 import { SectionTransition } from "@/components/SectionTransition";
 
 export default function Home() {
   return (
     <main className="bg-bg-primary min-h-screen">
-      <CursorGlow />
+      <ItachiLoader />
+      <KunaiCursor />
       <Navbar />
       <Hero />
       <SectionTransition />
