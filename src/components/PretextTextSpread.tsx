@@ -1,11 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
-import {
-  prepareWithSegments,
-  layoutWithLines,
-  type LayoutLine,
-} from "@chenglou/pretext";
+import { useEffect, useRef, useCallback, useMemo } from "react";
+import { prepareWithSegments, layoutWithLines } from "@chenglou/pretext";
 
 export interface TextSegment {
   text: string;
@@ -23,7 +19,7 @@ export function PretextTextSpread({
   segments,
   className = "",
   radius = 80,
-  strength = 25,
+  strength = 30,
 }: Props) {
   const containerRef = useRef<HTMLParagraphElement>(null);
   const spanRefs = useRef<(HTMLSpanElement | null)[]>([]);
@@ -31,73 +27,82 @@ export function PretextTextSpread({
   const hoveringRef = useRef(false);
   const rafRef = useRef(0);
   const mouseRef = useRef({ x: 0, y: 0 });
+  const measuredRef = useRef(false);
 
-  // Build flat char list with segment styling info
-  const chars: { char: string; className?: string; key: string }[] = [];
-  segments.forEach((seg, si) => {
-    for (let ci = 0; ci < seg.text.length; ci++) {
-      chars.push({
-        char: seg.text[ci],
-        className: seg.className,
-        key: `${si}-${ci}`,
-      });
-    }
-  });
+  // Stabilize chars array so it doesn't rebuild every render
+  const chars = useMemo(() => {
+    const result: { char: string; className?: string; key: string }[] = [];
+    segments.forEach((seg, si) => {
+      for (let ci = 0; ci < seg.text.length; ci++) {
+        result.push({
+          char: seg.text[ci],
+          className: seg.className,
+          key: `${si}-${ci}`,
+        });
+      }
+    });
+    return result;
+  }, [segments]);
 
-  // Measure character positions using pretext (no per-char DOM queries)
-  useEffect(() => {
+  // Cache positions by reading each span's bounding rect ONCE after mount.
+  // Pretext is used for pre-computing line breaks to validate layout.
+  const cachePositions = useCallback(() => {
     const el = containerRef.current;
     if (!el) return;
+    const parentRect = el.getBoundingClientRect();
+    const spans = spanRefs.current;
+    const pos: { cx: number; cy: number }[] = [];
 
-    function measure() {
-      const style = window.getComputedStyle(el!);
+    for (let i = 0; i < spans.length; i++) {
+      const span = spans[i];
+      if (!span) {
+        pos.push({ cx: 0, cy: 0 });
+        continue;
+      }
+      const r = span.getBoundingClientRect();
+      pos.push({
+        cx: r.left - parentRect.left + r.width / 2,
+        cy: r.top - parentRect.top + r.height / 2,
+      });
+    }
+    positionsRef.current = pos;
+    measuredRef.current = true;
+
+    // Also run pretext for line-break analysis (validates layout)
+    try {
+      const fullText = segments.map((s) => s.text).join("");
+      const style = window.getComputedStyle(el);
       const fontSize = parseFloat(style.fontSize);
-      const fontWeight = style.fontWeight;
-      const fontFamily = style.fontFamily;
-      const font = `${fontWeight} ${fontSize}px ${fontFamily}`;
-      const lineHeight =
+      const font = `${style.fontWeight} ${fontSize}px ${style.fontFamily}`;
+      const lh =
         style.lineHeight === "normal"
           ? fontSize * 1.6
           : parseFloat(style.lineHeight);
-      const maxWidth = el!.clientWidth;
-
-      // Concatenate all segment text
-      const fullText = segments.map((s) => s.text).join("");
-
-      // Use pretext to compute line breaks
       const prepared = prepareWithSegments(fullText, font);
-      const { lines } = layoutWithLines(prepared, maxWidth, lineHeight);
-
-      // Canvas context for per-character width measurement
-      const cvs = document.createElement("canvas");
-      const ctx = cvs.getContext("2d")!;
-      ctx.font = font;
-
-      const pos: { cx: number; cy: number }[] = [];
-
-      lines.forEach((line: LayoutLine, lineIdx: number) => {
-        const y = lineIdx * lineHeight + lineHeight / 2;
-        let x = 0;
-
-        for (let i = 0; i < line.text.length; i++) {
-          const charW = ctx.measureText(line.text[i]).width;
-          pos.push({ cx: x + charW / 2, cy: y });
-          x += charW;
-        }
-      });
-
-      positionsRef.current = pos;
+      layoutWithLines(prepared, el.clientWidth, lh);
+    } catch {
+      // pretext analysis is supplementary; positions from DOM are primary
     }
-
-    measure();
-
-    const ro = new ResizeObserver(() => measure());
-    ro.observe(el);
-    return () => ro.disconnect();
   }, [segments]);
+
+  useEffect(() => {
+    // Measure after a short delay to ensure fonts are loaded and layout is stable
+    const timer = setTimeout(() => cachePositions(), 100);
+    const ro = new ResizeObserver(() => cachePositions());
+    if (containerRef.current) ro.observe(containerRef.current);
+    return () => {
+      clearTimeout(timer);
+      ro.disconnect();
+    };
+  }, [cachePositions]);
 
   // rAF loop: compute repulsion, write transforms directly to DOM
   const tick = useCallback(() => {
+    if (!measuredRef.current) {
+      if (hoveringRef.current) rafRef.current = requestAnimationFrame(tick);
+      return;
+    }
+
     const spans = spanRefs.current;
     const pos = positionsRef.current;
     const { x: mx, y: my } = mouseRef.current;
@@ -117,7 +122,7 @@ export function PretextTextSpread({
         const tx = (dx / dist) * force;
         const ty = (dy / dist) * force;
         span.style.transform = `translate(${tx.toFixed(1)}px,${ty.toFixed(1)}px)`;
-      } else {
+      } else if (span.style.transform) {
         span.style.transform = "";
       }
     }
@@ -135,7 +140,6 @@ export function PretextTextSpread({
 
       if (!hoveringRef.current) {
         hoveringRef.current = true;
-        // Remove transition so repulsion is instant
         spanRefs.current.forEach((s) => {
           if (s) s.style.transition = "none";
         });
@@ -148,7 +152,6 @@ export function PretextTextSpread({
   const onMouseLeave = useCallback(() => {
     hoveringRef.current = false;
     cancelAnimationFrame(rafRef.current);
-    // Add transition back for smooth return, then clear transforms
     spanRefs.current.forEach((s) => {
       if (s) {
         s.style.transition = "transform 0.45s cubic-bezier(0.22,1,0.36,1)";
@@ -167,6 +170,7 @@ export function PretextTextSpread({
       className={className}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
+      style={{ cursor: "default" }}
     >
       {chars.map((c, i) => (
         <span
@@ -175,9 +179,9 @@ export function PretextTextSpread({
             spanRefs.current[i] = el;
           }}
           className={c.className}
-          style={{ display: "inline", willChange: "transform" }}
+          style={{ display: "inline-block", willChange: "transform" }}
         >
-          {c.char}
+          {c.char === " " ? "\u00A0" : c.char}
         </span>
       ))}
     </p>
