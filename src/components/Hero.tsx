@@ -2,10 +2,27 @@
 
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { NameReveal } from "./NameReveal";
 import { Typewriter } from "./Typewriter";
 
 const ParticleField = dynamic(() => import("./ParticleField"), { ssr: false });
+
+const nameLetters = "KOMAL".split("");
+const middleLetters = "KRISHAN".split("");
+const lastLetters = "SHRESTHA".split("");
+
+const letterVariants = {
+  hidden: { opacity: 0, y: 80, rotateX: -90 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    transition: {
+      duration: 0.8,
+      delay: 0.3 + i * 0.04,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  }),
+};
 
 export function Hero() {
   return (
@@ -15,33 +32,109 @@ export function Hero() {
     >
       <ParticleField />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 w-full pt-20">
+      {/* Ambient gradient orbs */}
+      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] rounded-full bg-accent-indigo/10 blur-[120px] animate-pulse-glow pointer-events-none" />
+      <div className="absolute bottom-1/4 -right-32 w-[400px] h-[400px] rounded-full bg-purple-500/10 blur-[100px] animate-pulse-glow pointer-events-none" style={{ animationDelay: "1.5s" }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-pink-500/5 blur-[140px] animate-pulse-glow pointer-events-none" style={{ animationDelay: "3s" }} />
+
+      <div className="relative z-10 max-w-6xl mx-auto px-6 w-full pt-20">
+        {/* Status badge */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="mb-4"
+          initial={{ opacity: 0, y: 20, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
+          className="mb-8"
         >
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-mono text-accent-indigo border border-border-accent bg-bg-card/50">
-            Available for work
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono border border-border-accent bg-bg-card/50 backdrop-blur-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-emerald opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-emerald" />
+            </span>
+            <span className="text-text-secondary">Available for work</span>
           </span>
         </motion.div>
 
-        <NameReveal />
+        {/* Split-text name animation */}
+        <div className="overflow-hidden mb-2">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            className="flex flex-wrap gap-x-4 md:gap-x-6"
+            style={{ perspective: "600px" }}
+          >
+            {nameLetters.map((letter, i) => (
+              <motion.span
+                key={`first-${i}`}
+                custom={i}
+                variants={letterVariants}
+                className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-display font-bold text-text-primary inline-block"
+                style={{ transformOrigin: "bottom" }}
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </motion.div>
+        </div>
+        <div className="overflow-hidden mb-2">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            className="flex flex-wrap gap-x-4 md:gap-x-6"
+            style={{ perspective: "600px" }}
+          >
+            {middleLetters.map((letter, i) => (
+              <motion.span
+                key={`mid-${i}`}
+                custom={i + nameLetters.length}
+                variants={letterVariants}
+                className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-display font-bold text-gradient inline-block"
+                style={{ transformOrigin: "bottom" }}
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </motion.div>
+        </div>
+        <div className="overflow-hidden mb-6">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            className="flex flex-wrap gap-x-4 md:gap-x-6"
+            style={{ perspective: "600px" }}
+          >
+            {lastLetters.map((letter, i) => (
+              <motion.span
+                key={`last-${i}`}
+                custom={i + nameLetters.length + middleLetters.length}
+                variants={letterVariants}
+                className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-display font-bold text-text-primary inline-block"
+                style={{ transformOrigin: "bottom" }}
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </motion.div>
+        </div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="text-xl md:text-2xl text-text-secondary font-body mt-2 mb-4"
+        {/* Role with gradient line */}
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 1.2, ease: [0.22, 1, 0.36, 1] as const }}
+          className="flex items-center gap-4 mb-4"
         >
-          Junior Web Developer & AI Builder
-        </motion.p>
+          <div className="h-px w-12 bg-gradient-to-r from-accent-indigo to-accent-purple" />
+          <p className="text-lg md:text-xl text-text-secondary font-body tracking-wide">
+            Junior Web Developer & AI Builder
+          </p>
+        </motion.div>
 
+        {/* Typewriter tagline */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 1.5 }}
+          className="mb-10"
         >
           <Typewriter
             text="Building intelligent web experiences from Biratnagar, Nepal."
@@ -49,49 +142,54 @@ export function Hero() {
           />
         </motion.div>
 
+        {/* CTA buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 2.5, ease: [0.22, 1, 0.36, 1] }}
-          className="flex flex-wrap gap-4 mt-10"
+          transition={{ duration: 0.8, delay: 2.2, ease: [0.22, 1, 0.36, 1] as const }}
+          className="flex flex-wrap gap-4"
         >
-          <a
+          <motion.a
             href="#projects"
-            className="px-6 py-3 rounded-lg bg-accent-indigo text-white font-body text-sm font-medium hover:bg-indigo-500 transition-colors focus:outline-none focus:ring-2 focus:ring-accent-indigo focus:ring-offset-2 focus:ring-offset-bg-primary"
+            whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(99,102,241,0.4)" }}
+            whileTap={{ scale: 0.97 }}
+            className="group relative px-8 py-4 rounded-xl font-body text-sm font-semibold text-white overflow-hidden transition-all"
           >
-            View Work
-          </a>
-          <a
+            <div className="absolute inset-0 bg-gradient-to-r from-accent-indigo via-purple-500 to-pink-500 animate-gradient-x" />
+            <span className="relative z-10 flex items-center gap-2">
+              View Work
+              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </span>
+          </motion.a>
+          <motion.a
             href="#contact"
-            className="px-6 py-3 rounded-lg border border-border-accent text-text-primary font-body text-sm font-medium hover:bg-accent-indigo/10 transition-colors focus:outline-none focus:ring-2 focus:ring-accent-indigo focus:ring-offset-2 focus:ring-offset-bg-primary"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            className="px-8 py-4 rounded-xl border border-border-accent text-text-primary font-body text-sm font-semibold hover:bg-white/5 backdrop-blur-sm transition-all"
           >
             Get In Touch
-          </a>
+          </motion.a>
         </motion.div>
 
+        {/* Scroll indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 3 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
-          <a href="#about" aria-label="Scroll down">
-            <motion.svg
-              animate={{ y: [0, 8, 0] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-text-muted"
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </motion.svg>
-          </a>
+          <span className="text-[10px] font-mono text-text-muted uppercase tracking-widest">Scroll</span>
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+            className="w-5 h-8 rounded-full border border-text-muted/30 flex items-start justify-center pt-1.5"
+          >
+            <motion.div
+              animate={{ opacity: [1, 0.3, 1], y: [0, 8, 0] }}
+              transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+              className="w-1 h-2 rounded-full bg-accent-indigo"
+            />
+          </motion.div>
         </motion.div>
       </div>
     </section>

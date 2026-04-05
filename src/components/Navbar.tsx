@@ -46,16 +46,16 @@ export function Navbar() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-[rgba(15,20,40,0.6)] backdrop-blur-xl border-b border-border-subtle"
+          ? "bg-[rgba(5,8,22,0.8)] backdrop-blur-2xl border-b border-border-subtle shadow-lg shadow-black/10"
           : "bg-transparent"
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <a
           href="#home"
-          className="font-display font-bold text-lg text-text-primary hover:text-accent-indigo transition-colors"
+          className="font-display font-bold text-lg text-gradient hover:opacity-80 transition-opacity"
         >
           KKS
         </a>
