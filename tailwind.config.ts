@@ -28,6 +28,9 @@ const config: Config = {
         body: ["var(--font-body)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
       },
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+      },
       animation: {
         marquee: "marquee 30s linear infinite",
         "leaf-fall": "leaf-fall 8s linear infinite",
@@ -35,6 +38,9 @@ const config: Config = {
         "chakra-pulse": "chakra-pulse 2s ease-in-out infinite",
         swirl: "swirl 3s linear infinite",
         "kunai-enter": "kunai-enter 0.6s ease-out forwards",
+        "sharingan-glow": "sharingan-glow 3s ease-in-out infinite",
+        "sharingan-spin": "sharingan-spin 12s linear infinite",
+        "vignette-pulse": "vignette-pulse 5s ease-in-out infinite",
       },
       keyframes: {
         marquee: {

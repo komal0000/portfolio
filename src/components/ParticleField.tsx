@@ -25,53 +25,80 @@ export default function ParticleField() {
     container.appendChild(renderer.domElement);
 
     const isMobile = window.innerWidth < 768;
-    const LEAF_COUNT = isMobile ? 30 : 60;
 
-    // Create leaf-shaped geometry (diamond/rhombus)
-    const leafShape = new THREE.Shape();
-    leafShape.moveTo(0, 0.5);
-    leafShape.quadraticCurveTo(0.3, 0.25, 0.15, 0);
-    leafShape.quadraticCurveTo(0, -0.1, -0.15, 0);
-    leafShape.quadraticCurveTo(-0.3, 0.25, 0, 0.5);
+    // ── Floating embers (dark red sparks drifting upward) ──
+    const EMBER_COUNT = isMobile ? 40 : 80;
+    const emberGeom = new THREE.CircleGeometry(0.08, 6);
+    const emberColors = [0x8b0000, 0xcc0000, 0x660000, 0x4a0000, 0x330000];
 
-    const leafGeom = new THREE.ShapeGeometry(leafShape);
-
-    const leafColors = [0xff6b00, 0xff8c00, 0xffd166, 0xe63946, 0xff6b00];
-
-    interface Leaf {
+    interface Ember {
       mesh: THREE.Mesh;
       speed: number;
       drift: number;
-      rotSpeed: number;
+      flicker: number;
       phase: number;
+      baseOpacity: number;
     }
 
-    const leaves: Leaf[] = [];
+    const embers: Ember[] = [];
 
-    for (let i = 0; i < LEAF_COUNT; i++) {
-      const color = leafColors[Math.floor(Math.random() * leafColors.length)];
+    for (let i = 0; i < EMBER_COUNT; i++) {
+      const color = emberColors[Math.floor(Math.random() * emberColors.length)];
+      const baseOpacity = 0.05 + Math.random() * 0.2;
       const mat = new THREE.MeshBasicMaterial({
         color,
         transparent: true,
-        opacity: 0.15 + Math.random() * 0.25,
-        side: THREE.DoubleSide,
+        opacity: baseOpacity,
       });
-      const mesh = new THREE.Mesh(leafGeom, mat);
-      const scale = 0.4 + Math.random() * 0.8;
+      const mesh = new THREE.Mesh(emberGeom, mat);
+      const scale = 0.3 + Math.random() * 1.2;
       mesh.scale.set(scale, scale, 1);
       mesh.position.set(
         (Math.random() - 0.5) * 100,
-        40 + Math.random() * 40,
+        (Math.random() - 0.5) * 80,
         (Math.random() - 0.5) * 30
       );
-      mesh.rotation.z = Math.random() * Math.PI * 2;
       scene.add(mesh);
 
-      leaves.push({
+      embers.push({
         mesh,
-        speed: 0.02 + Math.random() * 0.04,
-        drift: (Math.random() - 0.5) * 0.02,
-        rotSpeed: (Math.random() - 0.5) * 0.02,
+        speed: 0.008 + Math.random() * 0.02,
+        drift: (Math.random() - 0.5) * 0.008,
+        flicker: 2 + Math.random() * 4,
+        phase: Math.random() * Math.PI * 2,
+        baseOpacity,
+      });
+    }
+
+    // ── Dust motes (very faint, tiny) ──
+    const DUST_COUNT = isMobile ? 20 : 50;
+    const dustGeom = new THREE.CircleGeometry(0.03, 4);
+
+    interface Dust {
+      mesh: THREE.Mesh;
+      speed: number;
+      phase: number;
+    }
+
+    const dusts: Dust[] = [];
+
+    for (let i = 0; i < DUST_COUNT; i++) {
+      const mat = new THREE.MeshBasicMaterial({
+        color: 0x1a1a1a,
+        transparent: true,
+        opacity: 0.08 + Math.random() * 0.12,
+      });
+      const mesh = new THREE.Mesh(dustGeom, mat);
+      mesh.scale.setScalar(0.5 + Math.random() * 1.5);
+      mesh.position.set(
+        (Math.random() - 0.5) * 120,
+        (Math.random() - 0.5) * 80,
+        (Math.random() - 0.5) * 20
+      );
+      scene.add(mesh);
+      dusts.push({
+        mesh,
+        speed: 0.003 + Math.random() * 0.006,
         phase: Math.random() * Math.PI * 2,
       });
     }
@@ -89,24 +116,37 @@ export default function ParticleField() {
 
     function animate() {
       animId = requestAnimationFrame(animate);
-      time += 0.01;
+      time += 0.008;
 
-      leaves.forEach((leaf) => {
-        leaf.mesh.position.y -= leaf.speed;
-        leaf.mesh.position.x += leaf.drift + Math.sin(time + leaf.phase) * 0.01;
-        leaf.mesh.rotation.z += leaf.rotSpeed;
-        leaf.mesh.rotation.x += leaf.rotSpeed * 0.5;
+      // Embers drift upward slowly
+      embers.forEach((ember) => {
+        ember.mesh.position.y += ember.speed;
+        ember.mesh.position.x += ember.drift + Math.sin(time * 0.5 + ember.phase) * 0.005;
 
-        // Reset leaf to top when it falls below
-        if (leaf.mesh.position.y < -50) {
-          leaf.mesh.position.y = 50 + Math.random() * 20;
-          leaf.mesh.position.x = (Math.random() - 0.5) * 100;
+        // Flicker opacity
+        const mat = ember.mesh.material as THREE.MeshBasicMaterial;
+        mat.opacity = ember.baseOpacity * (0.4 + 0.6 * Math.abs(Math.sin(time * ember.flicker + ember.phase)));
+
+        // Reset when drifted too high
+        if (ember.mesh.position.y > 50) {
+          ember.mesh.position.y = -50 - Math.random() * 20;
+          ember.mesh.position.x = (Math.random() - 0.5) * 100;
         }
       });
 
-      // Gentle camera tilt following mouse
-      scene.rotation.x += (mouse.y * 0.03 - scene.rotation.x) * 0.02;
-      scene.rotation.y += (mouse.x * 0.03 - scene.rotation.y) * 0.02;
+      // Dust floats lazily
+      dusts.forEach((dust) => {
+        dust.mesh.position.y += dust.speed;
+        dust.mesh.position.x += Math.sin(time * 0.3 + dust.phase) * 0.003;
+        if (dust.mesh.position.y > 50) {
+          dust.mesh.position.y = -50;
+          dust.mesh.position.x = (Math.random() - 0.5) * 120;
+        }
+      });
+
+      // Very subtle camera drift following mouse
+      scene.rotation.x += (mouse.y * 0.015 - scene.rotation.x) * 0.01;
+      scene.rotation.y += (mouse.x * 0.015 - scene.rotation.y) * 0.01;
 
       renderer.render(scene, camera);
     }

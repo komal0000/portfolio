@@ -112,6 +112,33 @@ body {
   100% { transform: translateX(0) rotate(0deg); opacity: 1; }
 }
 
+@keyframes sharingan-glow {
+  0%, 100% { opacity: 0.6; box-shadow: 0 0 30px 8px rgba(200, 0, 0, 0.4), 0 0 60px 20px rgba(200, 0, 0, 0.15), inset 0 0 15px rgba(200, 0, 0, 0.3); }
+  50% { opacity: 1; box-shadow: 0 0 40px 12px rgba(255, 0, 0, 0.6), 0 0 80px 30px rgba(200, 0, 0, 0.25), inset 0 0 20px rgba(255, 0, 0, 0.5); }
+}
+
+@keyframes sharingan-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes dark-mist {
+  0%, 100% { opacity: 0.3; transform: translateX(0) scaleY(1); }
+  50% { opacity: 0.5; transform: translateX(-20px) scaleY(1.1); }
+}
+
+@keyframes crow-float {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+  15% { opacity: 0.6; }
+  85% { opacity: 0.6; }
+  100% { transform: translate(var(--crow-dx, 100px), var(--crow-dy, -200px)) rotate(var(--crow-rot, 15deg)); opacity: 0; }
+}
+
+@keyframes vignette-pulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 0.75; }
+}
+
 /* ─── Utility Classes ─── */
 
 .animate-gradient-x {
@@ -142,6 +169,22 @@ body {
 
 .animate-chakra-pulse {
   animation: chakra-pulse 2s ease-in-out infinite;
+}
+
+.animate-sharingan-glow {
+  animation: sharingan-glow 3s ease-in-out infinite;
+}
+
+.animate-sharingan-spin {
+  animation: sharingan-spin 12s linear infinite;
+}
+
+.animate-dark-mist {
+  animation: dark-mist 8s ease-in-out infinite;
+}
+
+.animate-vignette-pulse {
+  animation: vignette-pulse 5s ease-in-out infinite;
 }
 
 .text-gradient {

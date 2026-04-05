@@ -1,26 +1,22 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Typewriter } from "./Typewriter";
 import { PretextTextSpread } from "@/components/PretextTextSpread";
 
-const ParticleField = dynamic(() => import("./ParticleField"), { ssr: false });
-
-const nameLetters = "KOMAL".split("");
-const middleLetters = "KRISHAN".split("");
-const lastLetters = "SHRESTHA".split("");
+const firstLine = "KOMAL KRISHAN".split("");
+const secondLine = "SHRESTHA".split("");
 
 const letterVariants = {
-  hidden: { opacity: 0, y: 80, rotateX: -90, filter: "blur(10px)" },
+  hidden: { opacity: 0, y: 40, filter: "blur(12px)" },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    rotateX: 0,
     filter: "blur(0px)",
     transition: {
-      duration: 0.8,
-      delay: 0.3 + i * 0.04,
+      duration: 0.9,
+      delay: 1.2 + i * 0.035,
       ease: [0.22, 1, 0.36, 1] as const,
     },
   }),
@@ -30,96 +26,106 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-end justify-center overflow-hidden bg-black"
     >
-      <ParticleField />
+      {/* ── ITACHI BACKGROUND IMAGE ── */}
+      <motion.div
+        initial={{ opacity: 0, scale: 1.1 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 3, ease: "easeOut" }}
+        className="absolute inset-0 z-0"
+      >
+        <Image
+          src="/itachi-bg.png"
+          alt=""
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+      </motion.div>
 
-      {/* Naruto ambient orbs - orange/red/gold */}
-      <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] rounded-full bg-[#ff6b00]/10 blur-[120px] animate-pulse-glow pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-32 w-[400px] h-[400px] rounded-full bg-[#e63946]/10 blur-[100px] animate-pulse-glow pointer-events-none" style={{ animationDelay: "1.5s" }} />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#ffd166]/5 blur-[140px] animate-pulse-glow pointer-events-none" style={{ animationDelay: "3s" }} />
+      {/* Dark overlays to ensure text readability */}
+      {/* Bottom heavy gradient — content lives here */}
+      <div
+        className="absolute inset-0 z-[1] pointer-events-none"
+        style={{
+          background: "linear-gradient(to top, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.7) 35%, rgba(0,0,0,0.2) 55%, transparent 75%)",
+        }}
+      />
+      {/* Left side darken for text area */}
+      <div
+        className="absolute inset-0 z-[1] pointer-events-none"
+        style={{
+          background: "linear-gradient(to right, rgba(0,0,0,0.6) 0%, transparent 50%)",
+        }}
+      />
+      {/* Subtle vignette */}
+      <div
+        className="absolute inset-0 z-[1] pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)",
+        }}
+      />
 
-      {/* Large Konoha leaf watermark */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-[0.04]">
-        <svg width="600" height="600" viewBox="0 0 24 24" fill="#ff6b00">
-          <path d="M12 2C12 2 4 8 4 14c0 3 2 6 5 7.5C10 20 11 18 12 16c1 2 2 4 3 5.5 3-1.5 5-4.5 5-7.5C20 8 12 2 12 2z" />
-          <path d="M12 2v14" stroke="#ff6b00" strokeWidth={0.3} />
-          <circle cx="12" cy="10" r="2.5" stroke="#ff6b00" strokeWidth={0.2} fill="none" />
-        </svg>
-      </div>
+      {/* Red ambient glow — ties into the Sharingan from the image */}
+      <div className="absolute top-[25%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[#cc0000]/[0.04] blur-[100px] pointer-events-none z-[2]" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 w-full pt-20">
-        {/* Mission status badge */}
+      {/* ── CONTENT — positioned at bottom ── */}
+      <div className="relative z-10 max-w-5xl mx-auto px-6 w-full pb-24">
+        {/* Status badge */}
         <motion.div
           initial={{ opacity: 0, y: 20, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
-          className="mb-8"
+          transition={{ duration: 0.6, delay: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
+          className="mb-5"
         >
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono border border-border-accent bg-bg-card/50 backdrop-blur-sm">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono border border-red-900/30 bg-black/60 backdrop-blur-sm">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff6b00] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff6b00]" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-600 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600" />
             </span>
-            <span className="text-text-secondary">Ready for Mission</span>
+            <span className="text-red-400/80">Sharingan Active</span>
           </span>
         </motion.div>
 
-        {/* Split-text name animation with smoke reveal */}
-        <div className="overflow-hidden mb-2">
+        {/* Name — two-line reveal */}
+        <div className="overflow-hidden mb-1">
           <motion.div
             initial="hidden"
             animate="visible"
-            className="flex flex-wrap gap-x-4 md:gap-x-6"
+            className="flex flex-wrap gap-x-2 md:gap-x-3"
             style={{ perspective: "600px" }}
           >
-            {nameLetters.map((letter, i) => (
+            {firstLine.map((letter, i) => (
               <motion.span
                 key={`first-${i}`}
                 custom={i}
                 variants={letterVariants}
-                className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-display font-bold text-text-primary inline-block"
-                style={{ transformOrigin: "bottom" }}
+                className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold inline-block tracking-tight ${
+                  letter === " " ? "w-3 md:w-4" : "text-text-primary"
+                }`}
+                style={{ textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}
               >
-                {letter}
+                {letter === " " ? "\u00A0" : letter}
               </motion.span>
             ))}
           </motion.div>
         </div>
-        <div className="overflow-hidden mb-2">
+        <div className="overflow-hidden mb-5">
           <motion.div
             initial="hidden"
             animate="visible"
-            className="flex flex-wrap gap-x-4 md:gap-x-6"
+            className="flex flex-wrap gap-x-2 md:gap-x-3"
             style={{ perspective: "600px" }}
           >
-            {middleLetters.map((letter, i) => (
-              <motion.span
-                key={`mid-${i}`}
-                custom={i + nameLetters.length}
-                variants={letterVariants}
-                className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-display font-bold text-gradient inline-block"
-                style={{ transformOrigin: "bottom" }}
-              >
-                {letter}
-              </motion.span>
-            ))}
-          </motion.div>
-        </div>
-        <div className="overflow-hidden mb-6">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            className="flex flex-wrap gap-x-4 md:gap-x-6"
-            style={{ perspective: "600px" }}
-          >
-            {lastLetters.map((letter, i) => (
+            {secondLine.map((letter, i) => (
               <motion.span
                 key={`last-${i}`}
-                custom={i + nameLetters.length + middleLetters.length}
+                custom={i + firstLine.length}
                 variants={letterVariants}
-                className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-display font-bold text-text-primary inline-block"
-                style={{ transformOrigin: "bottom" }}
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-gradient inline-block tracking-tight"
+                style={{ textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}
               >
                 {letter}
               </motion.span>
@@ -127,47 +133,47 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* Role with gradient line */}
+        {/* Role line */}
         <motion.div
-          initial={{ opacity: 0, x: -40 }}
+          initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 1.2, ease: [0.22, 1, 0.36, 1] as const }}
-          className="flex items-center gap-4 mb-4"
+          transition={{ duration: 0.8, delay: 2.0, ease: [0.22, 1, 0.36, 1] as const }}
+          className="flex items-center gap-4 mb-3"
         >
-          <div className="h-px w-12 bg-gradient-to-r from-[#ff6b00] to-[#e63946]" />
+          <div className="h-px w-10 bg-gradient-to-r from-red-600 to-red-900" />
           <PretextTextSpread
-            className="text-lg md:text-xl text-text-secondary font-body tracking-wide"
+            className="text-base md:text-lg text-text-secondary/90 font-body tracking-wide"
             segments={[{ text: "Junior Web Developer & AI Builder" }]}
           />
         </motion.div>
 
-        {/* Typewriter tagline */}
+        {/* Typewriter */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.5 }}
-          className="mb-10"
+          transition={{ duration: 0.6, delay: 2.4 }}
+          className="mb-8"
         >
           <Typewriter
             text="Building intelligent web experiences from Biratnagar, Nepal."
-            delayStart={1800}
+            delayStart={2600}
           />
         </motion.div>
 
-        {/* CTA buttons - Naruto orange */}
+        {/* CTA buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 2.2, ease: [0.22, 1, 0.36, 1] as const }}
+          transition={{ duration: 0.8, delay: 3.0, ease: [0.22, 1, 0.36, 1] as const }}
           className="flex flex-wrap gap-4"
         >
           <motion.a
             href="#projects"
-            whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(255,107,0,0.4)" }}
+            whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(200,0,0,0.35)" }}
             whileTap={{ scale: 0.97 }}
-            className="group relative px-8 py-4 rounded-xl font-body text-sm font-semibold text-black overflow-hidden transition-all"
+            className="group relative px-7 py-3.5 rounded-xl font-body text-sm font-semibold text-white overflow-hidden transition-all"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-[#ff6b00] via-[#e63946] to-[#ffd166] animate-gradient-x" />
+            <div className="absolute inset-0 bg-gradient-to-r from-red-700 via-red-600 to-[#ff6b00] opacity-90" />
             <span className="relative z-10 flex items-center gap-2">
               View Missions
               <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -177,33 +183,33 @@ export function Hero() {
             href="#contact"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
-            className="px-8 py-4 rounded-xl border border-border-accent text-text-primary font-body text-sm font-semibold hover:bg-[#ff6b00]/5 backdrop-blur-sm transition-all"
+            className="px-7 py-3.5 rounded-xl border border-red-900/40 text-text-primary font-body text-sm font-semibold hover:bg-red-900/10 backdrop-blur-sm transition-all"
           >
             Send a Scroll
           </motion.a>
         </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 3 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        >
-          <span className="text-[10px] font-mono text-text-muted uppercase tracking-widest">Scroll</span>
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-            className="w-5 h-8 rounded-full border border-text-muted/30 flex items-start justify-center pt-1.5"
-          >
-            <motion.div
-              animate={{ opacity: [1, 0.3, 1], y: [0, 8, 0] }}
-              transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-              className="w-1 h-2 rounded-full bg-[#ff6b00]"
-            />
-          </motion.div>
-        </motion.div>
       </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 3.5 }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
+      >
+        <span className="text-[10px] font-mono text-text-muted/50 uppercase tracking-widest">Scroll</span>
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+          className="w-5 h-8 rounded-full border border-red-900/30 flex items-start justify-center pt-1.5"
+        >
+          <motion.div
+            animate={{ opacity: [1, 0.3, 1], y: [0, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+            className="w-1 h-2 rounded-full bg-red-700"
+          />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
