@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { SharinganIcon } from "@/components/SharinganIcon";
 
 const SESSION_KEY = "kks_itachi_loader_seen_session";
 const LOADER_DURATION_MS = 3600;
@@ -69,7 +68,7 @@ export function ItachiLoaderRefined() {
     progress < 34
       ? "Loading shadows"
       : progress < 72
-        ? "Sharingan awakening"
+        ? "Chakra syncing"
         : "Entering portfolio";
 
   return (
@@ -106,21 +105,17 @@ export function ItachiLoaderRefined() {
             </video>
           </motion.div>
 
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(200,0,0,0.14)_0%,_rgba(0,0,0,0.45)_38%,_rgba(0,0,0,0.88)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(200,0,0,0.14)_0%,_rgba(0,0,0,0.45)_38%,_rgba(0,0,0,0.9)_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(to_top,_rgba(0,0,0,0.94)_0%,_rgba(0,0,0,0.5)_35%,_rgba(0,0,0,0.78)_100%)]" />
           <div className="absolute inset-0 animate-vignette-pulse bg-[radial-gradient(ellipse_at_center,_transparent_30%,_rgba(0,0,0,0.78)_100%)]" />
 
-          <div className="relative z-10 flex h-full items-center justify-center px-6">
+          <div className="relative z-10 flex h-full items-center justify-center px-5 sm:px-6">
             <motion.div
               initial={{ opacity: 0, y: 16, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               className="w-full max-w-sm text-center"
             >
-              <div className="mb-7 flex justify-center">
-                <SharinganIcon size={112} spinDuration={6.8} />
-              </div>
-
               <p className="font-mono text-[0.65rem] uppercase tracking-[0.45em] text-red-200/70">
                 Itachi Loader
               </p>
