@@ -7,25 +7,25 @@ import { Experience } from "@/components/Experience";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 import { KunaiImageCursor } from "@/components/KunaiImageCursor";
-import { ItachiLoader } from "@/components/ItachiLoader";
-import { SectionTransition } from "@/components/SectionTransition";
+import { ItachiLoaderRefined } from "@/components/ItachiLoaderRefined";
+import { ThreeTomoeTransition } from "@/components/ThreeTomoeTransition";
 
 export default function Home() {
   return (
     <main className="bg-bg-primary min-h-screen">
-      <ItachiLoader />
+      <ItachiLoaderRefined />
       <KunaiImageCursor />
       <Navbar />
       <Hero />
-      <SectionTransition />
+      <ThreeTomoeTransition />
       <About />
-      <SectionTransition />
+      <ThreeTomoeTransition />
       <Skills />
-      <SectionTransition />
+      <ThreeTomoeTransition />
       <Projects />
-      <SectionTransition />
+      <ThreeTomoeTransition />
       <Experience />
-      <SectionTransition />
+      <ThreeTomoeTransition />
       <Contact />
       <Footer />
     </main>

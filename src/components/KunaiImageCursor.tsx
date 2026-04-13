@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 const CURSOR_SIZE = 76;
@@ -8,27 +8,42 @@ const TIP_X = CURSOR_SIZE * 0.055;
 const TIP_Y = CURSOR_SIZE * 0.92;
 const IMAGE_DIRECTION_DEG = 136;
 const HANDLE_AXIS_DEG = -44;
+const POSITION_LERP = 0.26;
+const VELOCITY_LERP = 0.18;
+const ROTATION_LERP = 0.12;
+const MIN_ROTATION_SPEED = 0.14;
+const MAX_SPEED_FOR_TRAIL = 2.8;
+
+function normalizeAngle(angle: number) {
+  let normalized = angle;
+
+  while (normalized > 180) normalized -= 360;
+  while (normalized < -180) normalized += 360;
+
+  return normalized;
+}
 
 export function KunaiImageCursor() {
   const [isDesktop, setIsDesktop] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [speed, setSpeed] = useState(0);
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   const angle = useMotionValue(0);
-
-  const springX = useSpring(cursorX, { damping: 20, stiffness: 280, mass: 0.42 });
-  const springY = useSpring(cursorY, { damping: 20, stiffness: 280, mass: 0.42 });
-  const springAngle = useSpring(angle, { damping: 24, stiffness: 260 });
-  const speedMotion = useSpring(speed, { damping: 24, stiffness: 170 });
+  const speedMotion = useMotionValue(0);
 
   const trailLength = useTransform(speedMotion, [0, 1], [18, 56]);
   const trailOpacity = useTransform(speedMotion, [0, 1], [0.12, 0.45]);
   const bladeScale = useTransform(speedMotion, [0, 1], [1, 1.06]);
   const glowOpacity = useTransform(speedMotion, [0, 1], [0.12, 0.32]);
 
-  const lastPointRef = useRef({ x: -100, y: -100 });
+  const targetPointRef = useRef({ x: -100, y: -100 });
+  const currentPointRef = useRef({ x: -100, y: -100 });
+  const velocityRef = useRef({ x: 0, y: 0 });
+  const currentAngleRef = useRef(0);
+  const visibleRef = useRef(false);
+  const frameRef = useRef<number>();
+  const lastTimestampRef = useRef<number>();
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 768px)");
@@ -49,6 +64,15 @@ export function KunaiImageCursor() {
     if (!isDesktop) {
       document.documentElement.classList.remove("kunai-cursor-active");
       setVisible(false);
+      targetPointRef.current = { x: -100, y: -100 };
+      currentPointRef.current = { x: -100, y: -100 };
+      velocityRef.current = { x: 0, y: 0 };
+      currentAngleRef.current = 0;
+      visibleRef.current = false;
+      cursorX.set(-100);
+      cursorY.set(-100);
+      angle.set(0);
+      speedMotion.set(0);
       return;
     }
 
@@ -57,52 +81,93 @@ export function KunaiImageCursor() {
     return () => {
       document.documentElement.classList.remove("kunai-cursor-active");
     };
-  }, [isDesktop]);
+  }, [isDesktop, angle, cursorX, cursorY, speedMotion]);
 
   useEffect(() => {
     if (!isDesktop) {
-      setSpeed(0);
-      cursorX.set(-100);
-      cursorY.set(-100);
       return;
     }
 
     const move = (event: MouseEvent) => {
-      const dx = event.clientX - lastPointRef.current.x;
-      const dy = event.clientY - lastPointRef.current.y;
-      const distance = Math.hypot(dx, dy);
-
-      if (distance > 0.2) {
-        const direction = (Math.atan2(dy, dx) * 180) / Math.PI;
-        angle.set(direction - IMAGE_DIRECTION_DEG);
-        setSpeed(Math.min(distance / 26, 1));
+      if (!visibleRef.current && currentPointRef.current.x <= -99) {
+        currentPointRef.current = { x: event.clientX, y: event.clientY };
+        cursorX.set(event.clientX);
+        cursorY.set(event.clientY);
       }
 
-      cursorX.set(event.clientX);
-      cursorY.set(event.clientY);
+      targetPointRef.current = { x: event.clientX, y: event.clientY };
+      visibleRef.current = true;
       setVisible(true);
-      lastPointRef.current = { x: event.clientX, y: event.clientY };
     };
 
     const leave = () => {
+      visibleRef.current = false;
       setVisible(false);
-      setSpeed(0);
+      speedMotion.set(0);
     };
 
     const enter = () => {
+      visibleRef.current = true;
       setVisible(true);
+    };
+
+    const animate = (timestamp: number) => {
+      const lastTimestamp = lastTimestampRef.current ?? timestamp;
+      const dt = Math.min((timestamp - lastTimestamp) / 16.67, 3);
+      lastTimestampRef.current = timestamp;
+
+      const positionAlpha = 1 - Math.pow(1 - POSITION_LERP, dt);
+      const velocityAlpha = 1 - Math.pow(1 - VELOCITY_LERP, dt);
+      const rotationAlpha = 1 - Math.pow(1 - ROTATION_LERP, dt);
+
+      const previousX = currentPointRef.current.x;
+      const previousY = currentPointRef.current.y;
+      const nextX = previousX + (targetPointRef.current.x - previousX) * positionAlpha;
+      const nextY = previousY + (targetPointRef.current.y - previousY) * positionAlpha;
+
+      currentPointRef.current = { x: nextX, y: nextY };
+
+      const instantaneousVelocityX = nextX - previousX;
+      const instantaneousVelocityY = nextY - previousY;
+
+      velocityRef.current = {
+        x: velocityRef.current.x + (instantaneousVelocityX - velocityRef.current.x) * velocityAlpha,
+        y: velocityRef.current.y + (instantaneousVelocityY - velocityRef.current.y) * velocityAlpha,
+      };
+
+      const filteredSpeed = Math.hypot(velocityRef.current.x, velocityRef.current.y);
+      const normalizedSpeed = Math.min(filteredSpeed / MAX_SPEED_FOR_TRAIL, 1);
+
+      if (filteredSpeed > MIN_ROTATION_SPEED) {
+        const desiredAngle =
+          (Math.atan2(velocityRef.current.y, velocityRef.current.x) * 180) / Math.PI - IMAGE_DIRECTION_DEG;
+        const angleDelta = normalizeAngle(desiredAngle - currentAngleRef.current);
+        currentAngleRef.current += angleDelta * rotationAlpha;
+      }
+
+      cursorX.set(nextX);
+      cursorY.set(nextY);
+      angle.set(currentAngleRef.current);
+      speedMotion.set(normalizedSpeed);
+
+      frameRef.current = window.requestAnimationFrame(animate);
     };
 
     window.addEventListener("mousemove", move, { passive: true });
     document.addEventListener("mouseleave", leave);
     document.addEventListener("mouseenter", enter);
+    frameRef.current = window.requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("mousemove", move);
       document.removeEventListener("mouseleave", leave);
       document.removeEventListener("mouseenter", enter);
+      if (frameRef.current) {
+        window.cancelAnimationFrame(frameRef.current);
+      }
+      lastTimestampRef.current = undefined;
     };
-  }, [isDesktop, cursorX, cursorY, angle]);
+  }, [isDesktop, angle, cursorX, cursorY, speedMotion]);
 
   if (!isDesktop) return null;
 
@@ -110,8 +175,8 @@ export function KunaiImageCursor() {
     <motion.div
       className="pointer-events-none fixed left-0 top-0 z-[1100]"
       style={{
-        x: springX,
-        y: springY,
+        x: cursorX,
+        y: cursorY,
         opacity: visible ? 1 : 0,
       }}
       transition={{ duration: 0.16 }}
@@ -123,7 +188,7 @@ export function KunaiImageCursor() {
           top: -TIP_Y,
           width: CURSOR_SIZE,
           height: CURSOR_SIZE,
-          rotate: springAngle,
+          rotate: angle,
           scale: bladeScale,
           transformOrigin: `${TIP_X}px ${TIP_Y}px`,
         }}
