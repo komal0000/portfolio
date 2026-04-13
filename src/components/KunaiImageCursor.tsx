@@ -3,9 +3,13 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
+const CURSOR_SIZE = 76;
+const TIP_X = CURSOR_SIZE * 0.055;
+const TIP_Y = CURSOR_SIZE * 0.92;
 const IMAGE_DIRECTION_DEG = 136;
+const HANDLE_AXIS_DEG = -44;
 
-export function KunaiCursor() {
+export function KunaiImageCursor() {
   const [isDesktop, setIsDesktop] = useState(false);
   const [visible, setVisible] = useState(false);
   const [speed, setSpeed] = useState(0);
@@ -49,6 +53,7 @@ export function KunaiCursor() {
     }
 
     document.documentElement.classList.add("kunai-cursor-active");
+
     return () => {
       document.documentElement.classList.remove("kunai-cursor-active");
     };
@@ -103,73 +108,68 @@ export function KunaiCursor() {
 
   return (
     <motion.div
-      className="pointer-events-none fixed top-0 left-0 z-[1100]"
+      className="pointer-events-none fixed left-0 top-0 z-[1100]"
       style={{
         x: springX,
         y: springY,
-        rotate: springAngle,
-        translateX: "-50%",
-        translateY: "-50%",
         opacity: visible ? 1 : 0,
       }}
-      transition={{ duration: 0.18 }}
+      transition={{ duration: 0.16 }}
     >
-      {/* Motion trail — dark red */}
       <motion.div
-        className="absolute top-1/2 -translate-y-1/2 right-[22px] h-[2px] origin-right rounded-full"
+        className="absolute"
         style={{
-          width: trailLength,
-          opacity: trailOpacity,
-          background: "linear-gradient(to left, transparent, rgba(200,0,0,0.7), rgba(140,0,0,0.3))",
+          left: -TIP_X,
+          top: -TIP_Y,
+          width: CURSOR_SIZE,
+          height: CURSOR_SIZE,
+          rotate: springAngle,
+          scale: bladeScale,
+          transformOrigin: `${TIP_X}px ${TIP_Y}px`,
         }}
-      />
-
-      <motion.div className="relative" style={{ scale: bladeScale }}>
-        {/* Red glow aura */}
+      >
         <motion.div
-          className="absolute inset-0 -z-10 rounded-full bg-[#cc0000] blur-[10px]"
-          style={{ opacity: glowOpacity }}
+          className="absolute rounded-full bg-[#cc0000] blur-[10px]"
+          style={{
+            left: TIP_X - 10,
+            top: TIP_Y - 10,
+            width: 20,
+            height: 20,
+            opacity: glowOpacity,
+          }}
         />
 
-        <svg
-          width="48"
-          height="48"
-          viewBox="0 0 48 48"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="drop-shadow-[0_0_8px_rgba(200,0,0,0.4)]"
-        >
-          {/* Ring pommel */}
-          <circle cx="24" cy="40" r="5" stroke="#9ca3af" strokeWidth="1.8" fill="none" />
-          <circle cx="24" cy="40" r="3" stroke="#6b7280" strokeWidth="0.6" fill="none" opacity="0.5" />
+        <motion.div
+          className="absolute h-[2px] rounded-full"
+          style={{
+            left: TIP_X,
+            top: TIP_Y - 1,
+            width: trailLength,
+            opacity: trailOpacity,
+            rotate: HANDLE_AXIS_DEG,
+            transformOrigin: "0% 50%",
+            background:
+              "linear-gradient(90deg, rgba(200,0,0,0.8), rgba(120,0,0,0.24), transparent)",
+          }}
+        />
 
-          {/* Handle — with bandage wrapping */}
-          <rect x="22" y="20" width="4" height="16" rx="1" fill="#3f3f46" />
-          {/* Wrapping lines */}
-          <line x1="22" y1="23" x2="26" y2="21.5" stroke="#52525b" strokeWidth="0.8" />
-          <line x1="22" y1="26" x2="26" y2="24.5" stroke="#52525b" strokeWidth="0.8" />
-          <line x1="22" y1="29" x2="26" y2="27.5" stroke="#52525b" strokeWidth="0.8" />
-          <line x1="22" y1="32" x2="26" y2="30.5" stroke="#52525b" strokeWidth="0.8" />
+        <div
+          className="absolute rounded-full border border-red-500/35 bg-red-500/20"
+          style={{
+            left: TIP_X - 3,
+            top: TIP_Y - 3,
+            width: 6,
+            height: 6,
+          }}
+        />
 
-          {/* Guard / cross-piece */}
-          <rect x="19" y="19" width="10" height="2.5" rx="1" fill="#71717a" />
-
-          {/* Blade — elongated diamond with metallic gradient */}
-          <defs>
-            <linearGradient id="kunai-blade" x1="24" y1="3" x2="24" y2="19" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#e5e7eb" />
-              <stop offset="40%" stopColor="#d1d5db" />
-              <stop offset="100%" stopColor="#9ca3af" />
-            </linearGradient>
-          </defs>
-          <path d="M24 3L19 19H29L24 3Z" fill="url(#kunai-blade)" stroke="#6b7280" strokeWidth="0.8" strokeLinejoin="round" />
-          {/* Center ridge line */}
-          <path d="M24 4.5V18.5" stroke="#b0b8c4" strokeWidth="0.7" opacity="0.6" />
-          {/* Edge highlight */}
-          <path d="M24 4L20.5 17" stroke="rgba(255,255,255,0.25)" strokeWidth="0.5" strokeLinecap="round" />
-          {/* Subtle red reflection on blade */}
-          <path d="M24 5L27 16" stroke="rgba(200,0,0,0.12)" strokeWidth="1" strokeLinecap="round" />
-        </svg>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/kunai-cursor.png"
+          alt=""
+          draggable={false}
+          className="h-full w-full select-none object-contain drop-shadow-[0_0_10px_rgba(200,0,0,0.28)]"
+        />
       </motion.div>
     </motion.div>
   );

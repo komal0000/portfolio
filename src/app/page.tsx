@@ -6,7 +6,7 @@ import { Projects } from "@/components/Projects";
 import { Experience } from "@/components/Experience";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
-import { KunaiCursor } from "@/components/KunaiCursor";
+import { KunaiImageCursor } from "@/components/KunaiImageCursor";
 import { ItachiLoader } from "@/components/ItachiLoader";
 import { SectionTransition } from "@/components/SectionTransition";
 
@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <main className="bg-bg-primary min-h-screen">
       <ItachiLoader />
-      <KunaiCursor />
+      <KunaiImageCursor />
       <Navbar />
       <Hero />
       <SectionTransition />
